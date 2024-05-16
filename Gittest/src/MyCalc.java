@@ -98,6 +98,7 @@ public class MyCalc extends JFrame {
 				textField.setText(exp);
 			}
 		});
+		panel_2.add(btnNewButton);
 		
 		JButton btnNewButton_16 = new JButton("(");
 		btnNewButton_16.addActionListener(new ActionListener() {
@@ -142,7 +143,6 @@ public class MyCalc extends JFrame {
 			}
 		});
 		panel_2.add(btnNewButton_19);
-		panel_2.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("8");
 		btnNewButton_1.addActionListener(new ActionListener() {

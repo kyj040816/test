@@ -12,6 +12,8 @@ public class Infix2Postfix {
 		Stack<String> stack = new Stack<String>(); //스택 구현, 연산자와 괄호를 임시로 저장하는데 사용, 연산자의 우선순위에 따라 후위 표현식으로의 변환과정에 사용
 		StringBuffer buf = new StringBuffer(); //문자열을 추가하거나 변경할 때 사용, 최종적으로 생성될 후위 표현식을 저장하는데 사용
 		
+		boolean last = true; // 마지막 토큰이 연산자였는지 여부 추적
+		
 		while(st.hasMoreTokens()) { //StringTokenizer 객체 st가 더 이상 토큰을 가지고 있지 않을 때까지 계속 반복, 입력된 식의 모든 토큰을 처리할 때까지 반복
 			String tok = st.nextToken(); //nextToken()메소드를 호출하여 현재 토큰을 가져옴
 			
@@ -19,15 +21,22 @@ public class Infix2Postfix {
 			if(opType(tok) > 0) { //메소드가 토큰인지 확인, 연산자라면 0보다 큰값을 반환
 				if (tok.equals("(")) { //"("를 만나면 스택에 푸시, 괄호 안의 연산 외부 연산보다 우선 처리
                     stack.push(tok);
+                    last = true;
                 } else if (tok.equals(")")) { //")"를 만나면, 스택에서 "("를 만날 때까지 연산자를 팝하여 버퍼에 추가, 괄호 안의 연산 먼저 처리
                     while (!stack.isEmpty() && !stack.peek().equals("(")) {
-                        buf.append(stack.pop()).append(" ");
+                        buf.append(stack.pop());
+                        buf.append(" ");
                     }
                     if (!stack.isEmpty() && stack.peek().equals("(")) {
                         stack.pop(); // 여는 괄호 제거
                     }
+                    last = false;
                 } else { //연산자를 만나면, 스택의 맨 위에 있는 연산자와 우선순위 비교 (getPriority 메소드 사용), 현재 연산자의 우선순위가 스택의 연산자보다 낮거나 같으면, 스택에서 연산자를 팝하여 버퍼에 추가 그 후 현재 연산자를 스택에 푸시
-                    while (!stack.empty()){
+                	if (tok.equals("-") && last) {
+                        // 음수 부호 처리
+                        buf.append("0 ");
+                    }
+                	while (!stack.empty()){
                     	String op2 =stack.peek();
                     	int p1 =getPriority(tok.charAt(0));
                     	int p2 =getPriority(op2.charAt(0));
@@ -37,10 +46,12 @@ public class Infix2Postfix {
                     	}else break;
     	            }
                     stack.push(tok.trim());
+                    last = true;
                 }
             } else { //토큰이 연산자가 아니라면 (즉, 숫자나 변수라면), 버퍼에 바로 추가
                 buf.append(tok.trim());
                 buf.append(" ");
+                last= false;
             }
         }
 			
@@ -86,7 +97,7 @@ public class Infix2Postfix {
 		return buf.toString();
 	}
 	
-	public static int opType(String op) {
+	public static int opType(String op) {//연산자의 종류 반환
 		op = op.trim();
 		if(op.length() > 1 || op.length() == 0) {
 			return -1;
@@ -109,7 +120,7 @@ public class Infix2Postfix {
 		return -1;
 	}
 	
-	private static int getPriority(char op) {
+	private static int getPriority(char op) {//우선순위
 		switch (op) {
 		case '+':
 		case '-':
