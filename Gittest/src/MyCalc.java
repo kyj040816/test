@@ -142,15 +142,23 @@ public class MyCalc extends JFrame {
 		btnNewButton_19.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!stack.isEmpty()) {
-		            stack.pop(); // 스택에서 마지막 문자 제거
-		            
-		            StringBuilder sb = new StringBuilder();// StringBuilder를 사용하여 스택의 내용을 문자열로 변환
-		            for (Character ch : stack) {
-		                sb.append(ch);
-		            }
-		            exp = sb.toString();
-		            textField.setText(exp);
-		        }
+			        char last = stack.peek(); 
+			        if(last == '(') {
+			            i = i - 1;
+			        }
+			        else if(last == ')') {
+			            i = i + 1;
+			        }
+			        stack.pop(); 
+
+			        
+			        StringBuilder sb = new StringBuilder();
+			        for (Character ch : stack) {
+			            sb.append(ch);
+			        }
+			        exp = sb.toString();
+			        textField.setText(exp); 
+			    }
 			}
 		});
 		panel_2.add(btnNewButton_19);
