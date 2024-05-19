@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Stack;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -20,7 +21,8 @@ import javax.swing.JMenuItem;
 
 public class MyCalc extends JFrame {
 	private String exp="";//공통 변수 (버튼을 누르면 거기에 적힌 문자나 숫자가 입력되도록 하기 위해)
-	private int i=0;
+	private int i=0;  
+	private Stack<Character> stack = new Stack<>();
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -56,10 +58,11 @@ public class MyCalc extends JFrame {
 		JMenu mnNewMenu = new JMenu("File");
 		menuBar.add(mnNewMenu);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Exit");
+		JMenuItem mntmNewMenuItem = new JMenuItem("^(제곱)");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				exp=exp+"^";
+				textField.setText(exp);
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
@@ -84,7 +87,7 @@ public class MyCalc extends JFrame {
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JLabel lblNewLabel = new JLabel("Status");
+		JLabel lblNewLabel = new JLabel("Status (음수취급을 할려면 괄호를 사용해주세요)         ");
 		panel_1.add(lblNewLabel);
 		
 		JPanel panel_2 = new JPanel();
@@ -95,6 +98,7 @@ public class MyCalc extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"7";
+				stack.push('7');
 				textField.setText(exp);
 			}
 		});
@@ -103,6 +107,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_16.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"(";
+				stack.push('(');
 				textField.setText(exp);
 				i=i+1;
 			}
@@ -114,6 +119,7 @@ public class MyCalc extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(i!=0) {
 					exp=exp+")";
+					stack.push(')');
 					textField.setText(exp);
 					i=i-1;
 				}
@@ -126,6 +132,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_18.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+".";
+				stack.push('.');
 				textField.setText(exp);
 			}
 		});
@@ -134,11 +141,16 @@ public class MyCalc extends JFrame {
 		JButton btnNewButton_19 = new JButton("<-");
 		btnNewButton_19.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!exp.isEmpty()) {
-					exp=exp.substring(0, exp.length()-1);//substring: 문자열의 특정 부분을 추출하는 데 사용
-														 //마지막 문자를 제외한 모든 문자가 새로운 문자열로 반환
-					textField.setText(exp);
-				}
+				if (!stack.isEmpty()) {
+		            stack.pop(); // 스택에서 마지막 문자 제거
+		            
+		            StringBuilder sb = new StringBuilder();// StringBuilder를 사용하여 스택의 내용을 문자열로 변환
+		            for (Character ch : stack) {
+		                sb.append(ch);
+		            }
+		            exp = sb.toString();
+		            textField.setText(exp);
+		        }
 			}
 		});
 		panel_2.add(btnNewButton_19);
@@ -148,6 +160,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"8";
+				stack.push('8');
 				textField.setText(exp);
 			}
 		});
@@ -157,6 +170,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"9";
+				stack.push('9');
 				textField.setText(exp);
 			}
 		});
@@ -166,6 +180,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"/";
+				stack.push('/');
 				textField.setText(exp);
 			}
 		});
@@ -175,6 +190,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"4";
+				stack.push('4');
 				textField.setText(exp);
 			}
 		});
@@ -184,6 +200,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"5";
+				stack.push('5');
 				textField.setText(exp);
 			}
 		});
@@ -193,6 +210,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"6";
+				stack.push('6');
 				textField.setText(exp);
 			}
 		});
@@ -202,6 +220,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"*";
+				stack.push('*');
 				textField.setText(exp);
 			}
 		});
@@ -211,6 +230,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"1";
+				stack.push('1');
 				textField.setText(exp);
 			}
 		});
@@ -220,6 +240,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"2";
+				stack.push('2');
 				textField.setText(exp);
 			}
 		});
@@ -229,6 +250,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"3";
+				stack.push('3');
 				textField.setText(exp);
 			}
 		});
@@ -238,6 +260,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"-";
+				stack.push('-');
 				textField.setText(exp);
 			}
 		});
@@ -247,6 +270,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_13.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"0";
+				stack.push('0');
 				textField.setText(exp);
 			}
 		});
@@ -264,9 +288,6 @@ public class MyCalc extends JFrame {
 		JButton btnNewButton_14 = new JButton("=");
 		btnNewButton_14.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(i!=0) {
-					textField.setText("괄호를 확인해주세요.");
-				}
 				String postfix = Infix2Postfix.convert(exp);
 				double value = Cale.eval(postfix);
 				textField.setText(String.valueOf(value));
@@ -278,6 +299,7 @@ public class MyCalc extends JFrame {
 		btnNewButton_15.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"+";
+				stack.push('+');
 				textField.setText(exp);
 			}
 		});

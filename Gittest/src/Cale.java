@@ -9,7 +9,7 @@ public class Cale {
 	    while(st.hasMoreTokens()) {
 	        String tok = st.nextToken();
 	        if(Infix2Postfix.opType(tok) > 0) {
-	        	if (Infix2Postfix.opType(tok) < 5) {
+	        	if (Infix2Postfix.opType(tok) < 6) {
 	        		double v1 = stack.pop();
 	        		double v2 = stack.pop();
 	        		double value = 0;
@@ -26,6 +26,9 @@ public class Cale {
 	                		break;
 	                	case 4: // /
 	                		value = v2 / v1;
+	                		break;
+	                	case 5: // ^
+	                		value = Math.pow(v2, v1);
 	                		break;
 	        		}
 	            stack.push(value);
