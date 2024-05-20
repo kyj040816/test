@@ -62,6 +62,7 @@ public class MyCalc extends JFrame {
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exp=exp+"^";
+				stack.push('^');
 				textField.setText(exp);
 			}
 		});
@@ -150,7 +151,6 @@ public class MyCalc extends JFrame {
 			            i = i + 1;
 			        }
 			        stack.pop(); 
-
 			        
 			        StringBuilder sb = new StringBuilder();
 			        for (Character ch : stack) {
@@ -296,9 +296,13 @@ public class MyCalc extends JFrame {
 		JButton btnNewButton_14 = new JButton("=");
 		btnNewButton_14.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String postfix = Infix2Postfix.convert(exp);
-				double value = Cale.eval(postfix);
-				textField.setText(String.valueOf(value));
+				try {
+					String postfix = Infix2Postfix.convert(exp);
+					double value = Cale.eval(postfix);
+					textField.setText(String.valueOf(value));
+				}catch(Exception ex) {
+					textField.setText("현재 이곳에서 계산이 불가한 수식입니다");
+				}
 			}
 		});
 		panel_2.add(btnNewButton_14);
